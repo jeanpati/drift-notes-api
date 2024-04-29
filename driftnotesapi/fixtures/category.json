@@ -1,0 +1,16 @@
+[
+  {
+    "model": "driftnotesapi.category",
+    "pk": 1,
+    "fields": {
+      "name": "Business"
+    }
+  },
+  {
+    "model": "driftnotesapi.category",
+    "pk": 2,
+    "fields": {
+      "name": "Personal"
+    }
+  }
+]
