@@ -1,0 +1,24 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "brad",
+      "password": "Admin",
+      "email": "bradputt@putt.com",
+      "first_name": "Brad",
+      "last_name": "Putt"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "jordan",
+      "password": "Admin",
+      "email": "jordanpull@pull.com",
+      "first_name": "Jordan",
+      "last_name": "Pull"
+    }
+  }
+]

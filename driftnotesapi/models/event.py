@@ -11,7 +11,7 @@ def event_end():
 
 
 class Event(models.Model):
-    day = models.ForeignKey("Day", on_delete=models.DO_NOTHING, null=True)
+    day = models.ForeignKey("Day", on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=155)
     location = models.CharField(max_length=155)
     start_time = models.TimeField(default=event_start)
