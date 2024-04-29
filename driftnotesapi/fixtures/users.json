@@ -20,5 +20,27 @@
       "first_name": "Jordan",
       "last_name": "Pull"
     }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "angelina",
+      "password": "Admin",
+      "email": "angelinajelly@jelly.com",
+      "first_name": "Angelina",
+      "last_name": "Jelly"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "username": "keanu",
+      "password": "Admin",
+      "email": "keanubreathes@breathes.com",
+      "first_name": "Keanu",
+      "last_name": "Breathes"
+    }
   }
 ]
