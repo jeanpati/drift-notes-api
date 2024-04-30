@@ -8,6 +8,7 @@ from driftnotesapi.views import *
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r"users", Users, "user")
+router.register(r"categories", Categories, "category")
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
