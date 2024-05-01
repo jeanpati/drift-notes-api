@@ -6,10 +6,13 @@ from rest_framework import status
 from driftnotesapi.models import Trip, UserTrip
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
+from .user import UserSerializer
 
 
 class TripSerializer(serializers.ModelSerializer):
     """JSON serializer for trips"""
+
+    creator = UserSerializer(many=False)
 
     class Meta:
         model = Trip
@@ -17,6 +20,7 @@ class TripSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "url",
+            "creator",
             "title",
             "city",
             "start_date",

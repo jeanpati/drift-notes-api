@@ -19,7 +19,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "id",
             "url",
             "username",
-            "password",
             "first_name",
             "last_name",
             "email",
