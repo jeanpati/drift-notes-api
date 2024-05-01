@@ -24,38 +24,61 @@ class Categories(ViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def create(self, request):
-        """Handle POST operations
-
-        Returns:
-            Response -- JSON serialized  category instance
         """
-        new_category = Category()
-        new_category.name = request.data["name"]
-        new_category.save()
+        @api {POST} /categories POST new category
+        @apiName CreateCategory
+        @apiGroup Category
 
-        serializer = CategorySerializer(new_category, context={"request": request})
+        @apiParamExample {json} Input
+            {
+                "name": "Business"
+            }
+        """
+        try:
+            new_category = Category()
+            new_category.name = request.data["name"]
+            new_category.save()
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer = CategorySerializer(new_category, context={"request": request})
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except KeyError:
+            return Response(
+                {"message": "Missing required field"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
     def retrieve(self, request, pk=None):
-        """Handle GET requests for single category"""
+        """
+        @api {GET} /categories/:id GET category matching primary key
+        @apiName GetCategory
+        @apiGroup Category
+        """
         try:
             category = Category.objects.get(pk=pk)
             serializer = CategorySerializer(category, context={"request": request})
             return Response(serializer.data)
+        except Category.DoesNotExist:
+            return Response(
+                {"message": "This category does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         except Exception as ex:
             return HttpResponseServerError(ex)
 
     def list(self, request):
-        """Handle GET requests to Category resource"""
-        category = Category.objects.all()
-
-        # Support filtering ProductCategorys by area id
-        # name = self.request.query_params.get('name', None)
-        # if name is not None:
-        #     ProductCategories = ProductCategories.filter(name=name)
-
-        serializer = CategorySerializer(
-            category, many=True, context={"request": request}
-        )
-        return Response(serializer.data)
+        """
+        @api {GET} /categories GET all categories
+        @apiName GetCategory
+        @apiGroup Category
+        """
+        try:
+            categories = Category.objects.all()
+            serializer = CategorySerializer(
+                categories, many=True, context={"request": request}
+            )
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
