@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.http import HttpResponseServerError
-from driftnotesapi.models import Day, UserTrip
+from driftnotesapi.models import Day, UserTrip, Trip
 
 
 class DaySerializer(serializers.ModelSerializer):
@@ -32,8 +32,13 @@ class Days(ViewSet):
         @apiGroup Day
         """
         try:
+            trip_id = request.data.get("trip")
+            trip = Trip.objects.get(pk=trip_id)
+            user = request.user
+            if not UserTrip.objects.filter(user=user, trip=trip).exists():
+                raise PermissionDenied("Only a collaborator of the trip can add days!")
             new_day = Day()
-            new_day.trip = request.data["trip"]
+            new_day.trip = trip
             new_day.date = request.data["date"]
             new_day.save()
 
@@ -54,13 +59,21 @@ class Days(ViewSet):
         @apiName GetDay
         @apiGroup Day
         """
+        user = request.user
         try:
-            day = Day.objects.get(pk=pk)
+            user_trip = UserTrip.objects.get(user=user)
+            day = Day.objects.get(pk=pk, trip=user_trip.trip)
             serializer = DaySerializer(day, context={"request": request})
             return Response(serializer.data)
+
+        except UserTrip.DoesNotExist:
+            return Response(
+                {"message": "You need to be part of a trip to view this resource."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         except Day.DoesNotExist:
             return Response(
-                {"message": "This day does not exist"},
+                {"message": "This day does not exist. Kinda spooky..."},
                 status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as ex:
@@ -73,18 +86,20 @@ class Days(ViewSet):
         @apiGroup Day
         """
         user = request.user
+
         try:
-            user_trip = UserTrip.objects.get(user=user)
+            user_trips = UserTrip.objects.filter(user=user)
+            trip_ids = user_trips.values_list(
+                "trip", flat=True
+            )  # shows flat list of trip ids instead of tuples
+            days = Day.objects.filter(trip__in=trip_ids)
+            serializer = DaySerializer(days, many=True, context={"request": request})
+            return Response(serializer.data)
         except UserTrip.DoesNotExist:
             return Response(
                 {"message": "You need to be part of a trip to view this resource."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-
-        try:
-            days = Day.objects.filter(trip=user_trip.trip)
-            serializer = DaySerializer(days, many=True, context={"request": request})
-            return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
@@ -100,13 +115,20 @@ class Days(ViewSet):
         """
         try:
             day = Day.objects.get(pk=pk)
+            trip = Trip.objects.get(pk=day.trip)
+            user = request.user
+            if not UserTrip.objects.filter(user=user, trip=trip).exists():
+                raise PermissionDenied(
+                    "Only a collaborator of the trip can delete days!"
+                )
             day.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         except Day.DoesNotExist:
             return Response(
-                {"message": "Day not found"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This day does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         except Exception as ex:
