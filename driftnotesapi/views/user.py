@@ -27,9 +27,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class Users(ViewSet):
-    """Users for Drift Notes
-    Purpose: Allow a user to communicate with the Drift Notes database to GET and PUT Users.
-    Methods: GET PUT(id)
+    """
+    Purpose: Allow a user to communicate with the Drift Notes database to handle Users.
+    Methods: GET PUT
     """
 
     def retrieve(self, request, pk=None):

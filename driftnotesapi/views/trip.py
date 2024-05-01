@@ -29,7 +29,10 @@ class TripSerializer(serializers.ModelSerializer):
 
 
 class Trips(ViewSet):
-    """Request handlers for Trips in the Drift Notes platform"""
+    """
+    Purpose: Allow a user to communicate with the Drift Notes database to handle Trips.
+    Methods: GET PUT POST DELETE
+    """
 
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
@@ -50,15 +53,6 @@ class Trips(ViewSet):
 
         @apiParamExample {json} Input
             {
-                "title": "My Trip",
-                "city": "New York",
-                "start_date": "2024-05-01",
-                "end_date": "2024-05-10"
-            }
-
-        @apiSuccessExample {json} Success
-            {
-                "id": 1,
                 "title": "My Trip",
                 "city": "New York",
                 "start_date": "2024-05-01",

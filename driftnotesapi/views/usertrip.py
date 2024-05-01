@@ -10,11 +10,7 @@ from .trip import TripSerializer
 
 
 class UserTripSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for UserTrips
-
-    Arguments:
-        serializers
-    """
+    """JSON serializer for UserTrips"""
 
     permission_classes = (IsAuthenticatedOrReadOnly,)
     user = UserSerializer(many=False)
@@ -35,47 +31,75 @@ class UserTripSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserTrips(ViewSet):
-    """Users for Drift Notes
-    Purpose: Allow a user to communicate with the Drift Notes database to GET PUT POST and DELETE Users.
-    Methods: GET PUT(id) POST
+    """
+    Purpose: Allow a user to communicate with the Drift Notes database to handle UserTrips.
+    Methods: GET POST DELETE
     """
 
     def create(self, request):
-        new_usertrip = UserTrip()
-        new_usertrip.user = request.data["user"]
-        new_usertrip.trip = request.data["trip"]
-        new_usertrip.save()
+        """
+        @api {POST} /usertrips POST new usertrip
+        @apiName CreateUserTrip
+        @apiGroup UserTrip
+        """
+        try:
+            new_usertrip = UserTrip()
+            new_usertrip.user = request.data["user"]
+            new_usertrip.trip = request.data["trip"]
+            new_usertrip.save()
 
-        serializer = UserTripSerializer(new_usertrip, context={"request": request})
+            serializer = UserTripSerializer(new_usertrip, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except KeyError:
+            return Response(
+                {"message": "Missing required field"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
     def list(self, request):
-        """Handle GET requests to usertrips resource"""
-        user = request.user
-        if user.is_authenticated:
-            usertrips = UserTrip.objects.filter(user=user)
-        else:
-            usertrips = UserTrip.objects.none()
+        """
+        @api {GET} /usertrips GET all usertrips
+        @apiName GetUserTrips
+        @apiGroup UserTrip
 
-        serializer = UserTripSerializer(
-            usertrips, many=True, context={"request": request}
-        )
-        return Response(serializer.data)
+        @apiSuccessExample {json} Success
+            [
+                {
+                    "id": 1,
+                    "user": 1,
+                    "trip": 1
+                },
+                {
+                    "id": 2,
+                    "user": 2,
+                    "trip": 3
+                }
+            ]
+        """
+        try:
+            user = request.user
+            if user.is_authenticated:
+                usertrips = UserTrip.objects.filter(user=user)
+            else:
+                usertrips = UserTrip.objects.none()
+
+            serializer = UserTripSerializer(
+                usertrips, many=True, context={"request": request}
+            )
+            return Response(serializer.data)
+
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
     def destroy(self, request, pk=None):
         """
-        @api {DELETE} /products/:id DELETE product
-        @apiName DeleteProduct
-        @apiGroup Product
-
-        @apiHeader {String} Authorization Auth token
-        @apiHeaderExample {String} Authorization
-            Token 9ba45f09651c5b0c404f37a2d2572c026c146611
-
-        @apiParam {id} id Product Id to delete
-        @apiSuccessExample {json} Success
-            HTTP/1.1 204 No Content
+        @api {DELETE} /usertrips/:id DELETE usertrip
+        @apiName DeleteUserTrip
+        @apiGroup UserTrip
         """
         try:
             usertrip = UserTrip.objects.get(pk=pk)
@@ -83,10 +107,11 @@ class UserTrips(ViewSet):
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        except UserTrip.DoesNotExist as ex:
-            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        except UserTrip.DoesNotExist:
+            return Response(
+                {"message": "This user trip does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         except Exception as ex:
-            return Response(
-                {"message": ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return HttpResponseServerError(ex)
