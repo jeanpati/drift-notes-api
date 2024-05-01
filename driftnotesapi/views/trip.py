@@ -136,9 +136,10 @@ class Trips(ViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        # Check if the user is the owner of the trip
-        if trip.seller.user != request.auth.user:
-            raise PermissionDenied("Only the creator of the trip can edit it!")
+        # Check if the user is a collaborator on the trip
+        user = request.user
+        if not UserTrip.objects.filter(user=user, trip=trip).exists():
+            raise PermissionDenied("Only a collaborator of the trip can edit it!")
 
         # Update trip data based on request data
         # If the key "name" exists in the request.data, its value is returned.
