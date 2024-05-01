@@ -81,7 +81,7 @@ class Days(ViewSet):
 
     def list(self, request):
         """
-        @api {GET} /days GET all days
+        @api {GET} /days GET all days for all of a user's trips
         @apiName GetDays
         @apiGroup Day
         """
@@ -92,7 +92,8 @@ class Days(ViewSet):
             trip_ids = user_trips.values_list(
                 "trip", flat=True
             )  # shows flat list of trip ids instead of tuples
-            days = Day.objects.filter(trip__in=trip_ids)
+            # using select_related() method retrieves data in a single query by performing a sql join operation
+            days = Day.objects.filter(trip__in=trip_ids).select_related("trip")
             serializer = DaySerializer(days, many=True, context={"request": request})
             return Response(serializer.data)
         except UserTrip.DoesNotExist:

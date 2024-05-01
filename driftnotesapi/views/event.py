@@ -5,10 +5,15 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.http import HttpResponseServerError
 from driftnotesapi.models import Event, UserTrip, Day, Category, event_start, event_end
+from .day import DaySerializer
+from .category import CategorySerializer
 
 
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for Events"""
+
+    day = DaySerializer(many=False)
+    category = CategorySerializer(many=False)
 
     class Meta:
         model = Event
@@ -78,7 +83,7 @@ class Events(ViewSet):
 
     def retrieve(self, request, pk=None):
         """
-        @api {GET} /events/:id GET event matching primary key
+        @api {GET} /events/:id GET event matching primary key of a user's trip
         @apiName GetEvent
         @apiGroup Event
         """
@@ -104,18 +109,22 @@ class Events(ViewSet):
 
     def list(self, request):
         """
-        @api {GET} /events GET all events
+        @api {GET} /events GET all events of a user's trips
         @apiName GetEvents
         @apiGroup Event
         """
         user = request.user
-
         try:
-            user_trips = UserTrip.objects.filter(user=user)
+            user_trips = UserTrip.objects.filter(
+                user=user
+            )  # gets all UserTrip instances associated with the user
             trip_ids = user_trips.values_list(
                 "trip", flat=True
-            )  # shows flat list of trip ids instead of tuples
-            events = Event.objects.filter(day__trip__in=trip_ids)
+            )  # shows flat list of all trip ids (instead of tuples) associated with the user
+            # using select_related() method retrieves data in a single query by performing a sql join operation
+            events = Event.objects.filter(day__trip__in=trip_ids).select_related(
+                "day__trip"
+            )  # fetches all events where it's day belongs to any of the user's trips
             serializer = EventSerializer(
                 events, many=True, context={"request": request}
             )
@@ -126,7 +135,7 @@ class Events(ViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
         except Exception as ex:
-            return HttpResponseServerError({"message": str(ex)})
+            return HttpResponseServerError(ex)
 
     def destroy(self, request, pk=None):
         """
@@ -152,7 +161,7 @@ class Events(ViewSet):
 
         except Event.DoesNotExist:
             return Response(
-                {"This day does not exist. Kinda spooky..."},
+                {"message": "This day does not exist. Kinda spooky..."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
