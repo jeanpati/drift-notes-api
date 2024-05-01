@@ -60,6 +60,26 @@ class UserTrips(ViewSet):
         except Exception as ex:
             return HttpResponseServerError(ex)
 
+    def retrieve(self, request, pk=None):
+        """
+        @api {GET} /usertrips/:id GET a UserTrip instance
+        @apiName GetUserTrip
+        @apiGroup UserTrip
+        """
+        try:
+            user_trip = UserTrip.objects.get(pk=pk)
+            serializer = UserTripSerializer(user_trip, context={"request": request})
+            return Response(serializer.data)
+
+        except UserTrip.DoesNotExist:
+            return Response(
+                {"message": "This user trip does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
     def list(self, request):
         """
         @api {GET} /usertrips GET all usertrips
