@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for product category"""
+    """JSON serializer for category"""
 
     class Meta:
         model = Category
@@ -19,7 +19,10 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class Categories(ViewSet):
-    """Categories for events"""
+    """
+    Purpose: Allow a user to communicate with the Drift Notes database to handle Categories.
+    Methods: GET POST DELETE
+    """
 
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
@@ -80,5 +83,23 @@ class Categories(ViewSet):
                 categories, many=True, context={"request": request}
             )
             return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
+    def destroy(self, request, pk=None):
+        """
+        @api {DELETE} /categories/:id DELETE category matching primary key
+        @apiName DeleteCategory
+        @apiGroup Category
+        """
+        try:
+            category = Category.objects.get(pk=pk)
+            category.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Category.DoesNotExist:
+            return Response(
+                {"message": "This category does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         except Exception as ex:
             return HttpResponseServerError(ex)
