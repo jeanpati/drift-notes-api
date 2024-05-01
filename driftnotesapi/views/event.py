@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.http import HttpResponseServerError
-from driftnotesapi.models import Event, UserTrip, Day
+from driftnotesapi.models import Event, UserTrip, Day, Category, event_start, event_end
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -41,38 +41,40 @@ class Events(ViewSet):
         @apiGroup Event
         """
         try:
-            trip_id = request.data.get("trip")
-            trip = Day.objects.get(pk=trip_id).trip
+            day_id = request.data.get("day")
+            day = Day.objects.get(pk=day_id)
+            trip = day.trip
             user = request.user
-
             if not UserTrip.objects.filter(user=user, trip=trip).exists():
                 raise PermissionDenied(
                     "Only a collaborator of the trip can add events!"
                 )
-
             new_event = Event()
-            new_event.day_id = trip_id
-            new_event.title = request.data.get("title")
-            new_event.location = request.data.get("location")
-            new_event.start_time = request.data.get("start_time")
-            new_event.end_time = request.data.get("end_time")
-            new_event.category_id = request.data.get("category")
+            new_event.day = day
+            new_event.title = request.data["title"]
+            new_event.location = request.data.get("location", "")
+            new_event.start_time = request.data.get("start_time", event_start())
+            new_event.end_time = request.data.get("end_time", event_end())
+            category_id = request.data.get("category")
+            if category_id:
+                new_event.category = Category.objects.get(pk=category_id)
             new_event.save()
 
             serializer = EventSerializer(new_event, context={"request": request})
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except KeyError as ex:
+        except KeyError:
             return Response(
-                {"message": f"Missing required field: {str(ex)}"},
+                {"message": "Missing required field"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         except Day.DoesNotExist:
             return Response(
-                {"message": "Day not found."}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This day does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as ex:
-            return HttpResponseServerError({"message": str(ex)})
+            return HttpResponseServerError(ex)
 
     def retrieve(self, request, pk=None):
         """
@@ -94,7 +96,7 @@ class Events(ViewSet):
             )
         except Event.DoesNotExist:
             return Response(
-                {"message": "This event does not exist."},
+                {"message": "This event does not exist. Kinda spooky..."},
                 status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as ex:
@@ -150,9 +152,9 @@ class Events(ViewSet):
 
         except Event.DoesNotExist:
             return Response(
-                {"message": "Event not found."},
+                {"This day does not exist. Kinda spooky..."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         except Exception as ex:
-            return HttpResponseServerError({"message": str(ex)})
+            return HttpResponseServerError(ex)
