@@ -1,4 +1,4 @@
-from django.http import HttpResponseServerError
+from django.http import HttpResponseServerError, HttpResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -63,18 +63,26 @@ class Trips(ViewSet):
             }
         """
 
-        new_trip = Trip()
-        new_trip.creator = request.user
-        new_trip.title = request.data["title"]
-        new_trip.city = request.data["city"]
-        new_trip.start_date = request.data["start_date"]
-        new_trip.end_date = request.data["end_date"]
-        new_trip.save()
+        try:
+            new_trip = Trip()
+            new_trip.creator = request.user
+            new_trip.title = request.data["title"]
+            new_trip.city = request.data["city"]
+            new_trip.start_date = request.data["start_date"]
+            new_trip.end_date = request.data["end_date"]
+            new_trip.save()
 
-        UserTrip.objects.create(user=new_trip.creator, trip=new_trip)
+            UserTrip.objects.create(user=new_trip.creator, trip=new_trip)
 
-        serializer = TripSerializer(new_trip, context={"request": request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer = TripSerializer(new_trip, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except KeyError:
+            return Response(
+                {"message": "Missing required field"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
     def list(self, request):
         """
@@ -84,28 +92,38 @@ class Trips(ViewSet):
         """
         user = request.user
         if user.is_authenticated:
-            trip_ids = UserTrip.objects.filter(user=user).values_list(
-                "trip_id", flat=True
-            )
-            trips = Trip.objects.filter(id__in=trip_ids)
+            try:
+                all_trips = Trip.objects.all()
+                serializer = TripSerializer(
+                    all_trips, context={"request": request}, many=True
+                )
+                return Response(serializer.data)
+            except Exception as ex:
+                return HttpResponseServerError(ex)
         else:
-            trips = Trip.objects.none()
-
-        serializer = TripSerializer(trips, many=True, context={"request": request})
-        return Response(serializer.data)
+            return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
 
     def retrieve(self, request, pk=None):
         """
-        @api {GET} /stores/:id GET store matching primary key
-        @apiName GetStore
-        @apiGroup Store
+        @api {GET} /trips/:id GET trips matching primary key
+        @apiName GetTrip
+        @apiGroup Trip
         """
-        try:
-            trip = Trip.objects.get(pk=pk)
-            serializer = TripSerializer(trip, context={"request": request})
-            return Response(serializer.data)
-        except Exception as ex:
-            return HttpResponseServerError(ex)
+        user = request.user
+        if user.is_authenticated:
+            try:
+                trip = Trip.objects.get(pk=pk)
+                serializer = TripSerializer(trip, context={"request": request})
+                return Response(serializer.data)
+            except Trip.DoesNotExist:
+                return Response(
+                    {"message": "This trip does not exist. Kinda spooky..."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            except Exception as ex:
+                return HttpResponseServerError(ex)
+        else:
+            return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
 
     def update(self, request, pk=None):
         """
@@ -117,19 +135,21 @@ class Trips(ViewSet):
             trip = Trip.objects.get(pk=pk)
         except Trip.DoesNotExist:
             return Response(
-                {"message": "This trip does not exist o.o"},
+                {"message": "This trip does not exist. Kinda spooky..."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         # Check if the user is the owner of the trip
         if trip.seller.user != request.auth.user:
-            raise PermissionDenied("Smile! You're on camera! This is not your trip!")
+            raise PermissionDenied("Only the creator of the trip can edit it!")
 
         # Update trip data based on request data
         # If the key "name" exists in the request.data, its value is returned.
         # If not, it returns the default value, which is trip.name.
-        trip.name = request.data.get("name", trip.name)
-        trip.description = request.data.get("description", trip.description)
+        trip.title = request.data.get("title", trip.title)
+        trip.city = request.data.get("city", trip.city)
+        trip.start_date = request.data.get("start_date", trip.start_date)
+        trip.end_date = request.data.get("end_date", trip.end_date)
         trip.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -144,9 +164,7 @@ class Trips(ViewSet):
             # Check if the user is the owner of the trip
             trip = Trip.objects.get(pk=pk)
             if trip.creator != request.auth.user:
-                raise PermissionDenied(
-                    "Smile! You're on camera! This is not your trip!"
-                )
+                raise PermissionDenied("Only the creator of the trip can delete it!")
             trip.delete()
 
             return Response(
@@ -154,14 +172,11 @@ class Trips(ViewSet):
                 status=status.HTTP_204_NO_CONTENT,
             )
 
-        except Trip.DoesNotExist as ex:
+        except Trip.DoesNotExist:
             return Response(
-                {"This trip does not exist. Kinda spooky...": ex.args[0]},
+                {"message": "This trip does not exist. Kinda spooky..."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         except Exception as ex:
-            return Response(
-                {"An unexpected error occurred. Uh oh.": ex.args[0]},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+            return HttpResponseServerError(ex)

@@ -5,6 +5,8 @@ from rest_framework import serializers
 from rest_framework import status
 from driftnotesapi.models import UserTrip
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .user import UserSerializer
+from .trip import TripSerializer
 
 
 class UserTripSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,6 +17,8 @@ class UserTripSerializer(serializers.HyperlinkedModelSerializer):
     """
 
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    user = UserSerializer(many=False)
+    trip = TripSerializer(many=False)
 
     class Meta:
         model = UserTrip
@@ -51,7 +55,6 @@ class UserTrips(ViewSet):
         user = request.user
         if user.is_authenticated:
             usertrips = UserTrip.objects.filter(user=user)
-            usertrips = UserTrip.objects.filter(id__in=trip_ids)
         else:
             usertrips = UserTrip.objects.none()
 
