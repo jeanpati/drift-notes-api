@@ -20,7 +20,7 @@ class DaySerializer(serializers.ModelSerializer):
 class Days(ViewSet):
     """
     Purpose: Allow a user to communicate with the Drift Notes database to handle Days.
-    Methods: GET PUT POST DELETE
+    Methods: GET POST DELETE
     """
 
     permission_classes = (IsAuthenticatedOrReadOnly,)
