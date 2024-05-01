@@ -167,3 +167,50 @@ class Events(ViewSet):
 
         except Exception as ex:
             return HttpResponseServerError(ex)
+
+    def update(self, request, pk=None):
+        """
+        @api {PUT} /events/:id UPDATE an existing event
+        @apiName UpdateEvent
+        @apiGroup Event
+
+        @apiParam {id} id Event Id to update
+        """
+        try:
+            event = Event.objects.get(pk=pk)
+            user = request.user
+
+            if not UserTrip.objects.filter(user=user, trip=event.day.trip).exists():
+                raise PermissionDenied(
+                    "Only a collaborator of the trip can update events!"
+                )
+
+            day_id = request.data.get("day")
+            if day_id:
+                event.day = Day.objects.get(pk=day_id)
+            event.title = request.data.get("title", event.title)
+            event.location = request.data.get("location", event.location)
+            event.start_time = request.data.get("start_time", event.start_time)
+            event.end_time = request.data.get("end_time", event.end_time)
+            category_id = request.data.get("category")
+            if category_id:
+                event.category = Category.objects.get(pk=category_id)
+
+            event.save()
+            serializer = EventSerializer(event, context={"request": request})
+            return Response(serializer.data)
+
+        except Event.DoesNotExist:
+            return Response(
+                {"message": "This event does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except Day.DoesNotExist:
+            return Response(
+                {"message": "This day does not exist. Kinda spooky..."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except Exception as ex:
+            return HttpResponseServerError(ex)
