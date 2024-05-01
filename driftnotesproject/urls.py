@@ -11,6 +11,9 @@ router.register(r"users", Users, "user")
 router.register(r"categories", Categories, "category")
 router.register(r"trips", Trips, "trip")
 router.register(r"usertrips", UserTrips, "usertrip")
+router.register(r"days", Days, "day")
+router.register(r"events", Events, "event")
+
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
