@@ -7,11 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for Users
-
-    Arguments:
-        serializers
-    """
+    """JSON serializer for Users"""
 
     class Meta:
         model = User
@@ -33,11 +29,10 @@ class Users(ViewSet):
     """
 
     def retrieve(self, request, pk=None):
-        """Handle GET requests for single user
-        Purpose: Allow a user to communicate with the Drift Notes database to retrieve one user
-        Methods:  GET
-        Returns:
-            Response -- JSON serialized customer instance
+        """
+        @api {GET} /users/:id GET user matching primary key
+        @apiName GetUser
+        @apiGroup User
         """
         try:
             user = User.objects.get(pk=pk)
@@ -51,7 +46,11 @@ class Users(ViewSet):
             return HttpResponseServerError(ex)
 
     def list(self, request):
-        """Handle GET requests to user resource"""
+        """
+        @api {GET} /users GET all users
+        @apiName GetUser
+        @apiGroup User
+        """
         try:
             users = User.objects.all()
             serializer = UserSerializer(users, many=True, context={"request": request})
