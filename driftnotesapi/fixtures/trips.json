@@ -3,9 +3,10 @@
     "model": "driftnotesapi.trip",
     "pk": 1,
     "fields": {
-      "title": "Business trip",
-      "description": "Meeting clients",
-      "start_date": "2024-04-30",
+      "creator": 1,
+      "title": "Business Trip",
+      "city": "New York",
+      "start_date": "2024-05-01",
       "end_date": "2024-05-05"
     }
   },
@@ -13,20 +14,22 @@
     "model": "driftnotesapi.trip",
     "pk": 2,
     "fields": {
-      "title": "Vacation",
-      "description": "Relaxing on the beach",
-      "start_date": "2024-05-01",
-      "end_date": "2024-05-10"
+      "creator": 2,
+      "title": "Family Vacation",
+      "city": "Miami",
+      "start_date": "2024-06-01",
+      "end_date": "2024-06-10"
     }
   },
   {
     "model": "driftnotesapi.trip",
     "pk": 3,
     "fields": {
-      "title": "Conference",
-      "description": "Industry event",
-      "start_date": "2024-05-10",
-      "end_date": "2024-05-15"
+      "creator": 1,
+      "title": "Hiking Adventure",
+      "city": "Denver",
+      "start_date": "2024-07-01",
+      "end_date": "2024-07-07"
     }
   }
 ]

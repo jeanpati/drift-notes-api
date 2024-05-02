@@ -1,0 +1,178 @@
+[
+  {
+    "model": "driftnotesapi.day",
+    "pk": 1,
+    "fields": {
+      "trip": 1,
+      "date": "2024-05-01"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 2,
+    "fields": {
+      "trip": 1,
+      "date": "2024-05-02"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 3,
+    "fields": {
+      "trip": 1,
+      "date": "2024-05-03"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 4,
+    "fields": {
+      "trip": 1,
+      "date": "2024-05-04"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 5,
+    "fields": {
+      "trip": 1,
+      "date": "2024-05-05"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 6,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-01"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 7,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-02"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 8,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-03"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 9,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-04"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 10,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-05"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 11,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-06"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 12,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-07"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 13,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-08"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 14,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-09"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 15,
+    "fields": {
+      "trip": 2,
+      "date": "2024-06-10"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 16,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-01"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 17,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-02"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 18,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-03"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 19,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-04"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 20,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-05"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 21,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-06"
+    }
+  },
+  {
+    "model": "driftnotesapi.day",
+    "pk": 22,
+    "fields": {
+      "trip": 3,
+      "date": "2024-07-07"
+    }
+  }
+]
