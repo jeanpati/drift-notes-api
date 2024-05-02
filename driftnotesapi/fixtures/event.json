@@ -4,7 +4,6 @@
     "pk": 1,
     "fields": {
       "title": "Client Meeting",
-      "description": "Discuss new project details",
       "category": 1,
       "start_time": "10:00",
       "end_time": "11:30",
@@ -17,7 +16,6 @@
     "pk": 2,
     "fields": {
       "title": "Team Lunch",
-      "description": "Celebrate successful project completion",
       "category": 1,
       "start_time": "12:00",
       "end_time": "13:30",
@@ -30,7 +28,6 @@
     "pk": 3,
     "fields": {
       "title": "Sightseeing",
-      "description": "Visit Statue of Liberty",
       "category": 2,
       "start_time": "14:00",
       "end_time": "16:00",
@@ -43,7 +40,6 @@
     "pk": 4,
     "fields": {
       "title": "Dinner with Clients",
-      "description": "Discuss future collaboration opportunities",
       "category": 1,
       "start_time": "19:00",
       "end_time": "21:00",
@@ -56,7 +52,6 @@
     "pk": 5,
     "fields": {
       "title": "Beach Day",
-      "description": "Relax on the beach",
       "category": 2,
       "start_time": "10:00",
       "end_time": "16:00",
@@ -69,7 +64,6 @@
     "pk": 6,
     "fields": {
       "title": "Water Sports",
-      "description": "Jet skiing and parasailing",
       "category": 2,
       "start_time": "10:00",
       "end_time": "12:00",
@@ -82,7 +76,6 @@
     "pk": 7,
     "fields": {
       "title": "Shopping",
-      "description": "Shop for souvenirs",
       "category": 2,
       "start_time": "14:00",
       "end_time": "16:00",
@@ -95,7 +88,6 @@
     "pk": 8,
     "fields": {
       "title": "Hiking",
-      "description": "Explore the Rockies",
       "category": 2,
       "start_time": "08:00",
       "end_time": "12:00",
@@ -108,7 +100,6 @@
     "pk": 9,
     "fields": {
       "title": "Rafting",
-      "description": "White-water rafting adventure",
       "category": 2,
       "start_time": "13:00",
       "end_time": "16:00",
