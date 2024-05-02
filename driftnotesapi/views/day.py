@@ -61,8 +61,8 @@ class Days(ViewSet):
         """
         user = request.user
         try:
-            user_trip = UserTrip.objects.get(user=user)
-            day = Day.objects.get(pk=pk, trip=user_trip.trip)
+            UserTrip.objects.get(user=user, trip__day__pk=pk)
+            day = Day.objects.get(pk=pk)
             serializer = DaySerializer(day, context={"request": request})
             return Response(serializer.data)
 
@@ -116,7 +116,7 @@ class Days(ViewSet):
         """
         try:
             day = Day.objects.get(pk=pk)
-            trip = Trip.objects.get(pk=day.trip)
+            trip = Trip.objects.get(pk=day.trip.id)
             user = request.user
             if not UserTrip.objects.filter(user=user, trip=trip).exists():
                 raise PermissionDenied(

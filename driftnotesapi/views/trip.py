@@ -6,7 +6,7 @@ from driftnotesapi.models import Trip, UserTrip, Day
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
 from .user import UserSerializer
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -137,6 +137,14 @@ class Trips(ViewSet):
         @apiName EditTrip
         @apiGroup Trip
         """
+
+        def parse_date(date_string, default_date=None):
+            # Use strptime (string parse time) to convert a date string to a datetime object
+            if date_string:
+                return datetime.strptime(date_string, "%Y-%m-%d").date()
+            else:
+                return default_date
+
         try:
             trip = Trip.objects.get(pk=pk)
         except Trip.DoesNotExist:
@@ -155,8 +163,8 @@ class Trips(ViewSet):
         # If not, it returns the default value, which is trip.name.
         trip.title = request.data.get("title", trip.title)
         trip.city = request.data.get("city", trip.city)
-        trip.start_date = request.data.get("start_date", trip.start_date)
-        trip.end_date = request.data.get("end_date", trip.end_date)
+        trip.start_date = parse_date(request.data.get("start_date", trip.start_date))
+        trip.end_date = parse_date(request.data.get("end_date", trip.end_date))
         trip.save()
         # Update days for the trip
         if "start_date" in request.data or "end_date" in request.data:

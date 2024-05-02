@@ -89,7 +89,7 @@ class Events(ViewSet):
         """
         user = request.user
         try:
-            user_trip = UserTrip.objects.get(user=user)
+            user_trip = UserTrip.objects.get(user=user, trip__day__event__pk=pk)
             event = Event.objects.get(pk=pk, day__trip=user_trip.trip)
             serializer = EventSerializer(event, context={"request": request})
             return Response(serializer.data)
@@ -105,7 +105,7 @@ class Events(ViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as ex:
-            return HttpResponseServerError({"message": str(ex)})
+            return HttpResponseServerError(ex)
 
     def list(self, request):
         """
