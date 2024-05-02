@@ -2,10 +2,11 @@ from django.http import HttpResponseServerError, HttpResponse
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from driftnotesapi.models import Trip, UserTrip
+from driftnotesapi.models import Trip, UserTrip, Day
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
 from .user import UserSerializer
+from datetime import timedelta
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -70,6 +71,14 @@ class Trips(ViewSet):
             new_trip.save()
 
             UserTrip.objects.create(user=new_trip.creator, trip=new_trip)
+
+            # Automatically create days for the trip
+            # Creates a day instance for each day of the trip starting from the start date
+            start_date = new_trip.start_date
+            end_date = new_trip.end_date
+            while start_date <= end_date:
+                Day.objects.create(trip=new_trip, date=start_date)
+                start_date += timedelta(days=1)
 
             serializer = TripSerializer(new_trip, context={"request": request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -149,6 +158,29 @@ class Trips(ViewSet):
         trip.start_date = request.data.get("start_date", trip.start_date)
         trip.end_date = request.data.get("end_date", trip.end_date)
         trip.save()
+        # Update days for the trip
+        if "start_date" in request.data or "end_date" in request.data:
+            # Delete days "less than" or before the new start date
+            # Delete days "greater than" or after the new end date
+            Day.objects.filter(trip=trip, date__lt=trip.start_date).delete()
+            Day.objects.filter(trip=trip, date__gt=trip.end_date).delete()
+
+            # Retrieve the existing days of the trip
+            existing_dates = Day.objects.filter(trip=trip).values_list(
+                "date", flat=True
+            )
+            # Calculate the number of days in the trip
+            trip_length = (trip.end_date - trip.start_date).days + 1
+            # Create a list of dates by incrementally adding the length of the trip to start date
+            trip_dates = [
+                trip.start_date + timedelta(days=x) for x in range(trip_length)
+            ]
+            # Turn both lists into sets so we can subtract them
+            # Create set of missing dates by subtracting existing_dates from trip_dates
+            missing_dates = set(trip_dates) - set(existing_dates)
+            # Create instances of Day for each missing date
+            for date in missing_dates:
+                Day.objects.create(trip=trip, date=date)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
