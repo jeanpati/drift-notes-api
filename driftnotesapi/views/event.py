@@ -187,6 +187,13 @@ class Events(ViewSet):
 
             day_id = request.data.get("day")
             if day_id:
+                # Check if the day belongs to a trip that the user is a part of
+                if not UserTrip.objects.filter(
+                    user=user, trip__day__pk=day_id
+                ).exists():
+                    raise PermissionDenied(
+                        "You can only add events to days of your trip!"
+                    )
                 event.day = Day.objects.get(pk=day_id)
             event.title = request.data.get("title", event.title)
             event.location = request.data.get("location", event.location)
