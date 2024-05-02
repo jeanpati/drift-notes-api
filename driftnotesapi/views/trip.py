@@ -140,6 +140,7 @@ class Trips(ViewSet):
 
         def parse_date(date_string, default_date=None):
             # Use strptime (string parse time) to convert a date string to a datetime object
+            # The second parameter specifies the format of the date string input
             if date_string:
                 return datetime.strptime(date_string, "%Y-%m-%d").date()
             else:
