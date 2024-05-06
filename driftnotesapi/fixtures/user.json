@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "username": "brad",
-      "password": "Admin",
+      "password": "pbkdf2_sha256$720000$0SExq9wLzjjutPemdlxK39$GwaXn4mmKBNZhFkNQsjlmGWucrGAiV+KVfHVGqvpcEk=",
       "email": "bradputt@putt.com",
       "first_name": "Brad",
       "last_name": "Putt"
@@ -15,7 +15,7 @@
     "pk": 2,
     "fields": {
       "username": "jordan",
-      "password": "Admin",
+      "password": "pbkdf2_sha256$720000$0SExq9wLzjjutPemdlxK39$GwaXn4mmKBNZhFkNQsjlmGWucrGAiV+KVfHVGqvpcEk=",
       "email": "jordanpull@pull.com",
       "first_name": "Jordan",
       "last_name": "Pull"
@@ -26,7 +26,7 @@
     "pk": 3,
     "fields": {
       "username": "angelina",
-      "password": "Admin",
+      "password": "pbkdf2_sha256$720000$0SExq9wLzjjutPemdlxK39$GwaXn4mmKBNZhFkNQsjlmGWucrGAiV+KVfHVGqvpcEk=",
       "email": "angelinajelly@jelly.com",
       "first_name": "Angelina",
       "last_name": "Jelly"
@@ -37,7 +37,7 @@
     "pk": 4,
     "fields": {
       "username": "keanu",
-      "password": "Admin",
+      "password": "pbkdf2_sha256$720000$0SExq9wLzjjutPemdlxK39$GwaXn4mmKBNZhFkNQsjlmGWucrGAiV+KVfHVGqvpcEk=",
       "email": "keanubreathes@breathes.com",
       "first_name": "Keanu",
       "last_name": "Breathes"
