@@ -95,7 +95,7 @@ class Categories(ViewSet):
         try:
             category = Category.objects.get(pk=pk)
             category.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
         except Category.DoesNotExist:
             return Response(
                 {"message": "This category does not exist. Kinda spooky..."},

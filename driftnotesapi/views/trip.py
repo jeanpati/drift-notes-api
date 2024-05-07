@@ -56,8 +56,8 @@ class Trips(ViewSet):
             {
                 "title": "My Trip",
                 "city": "New York",
-                "start_date": "2024-05-01",
-                "end_date": "2024-05-10"
+                "start_date": "05/01/2024",
+                "end_date": "05/10/2024"
             }
         """
 
@@ -66,8 +66,8 @@ class Trips(ViewSet):
             new_trip.creator = request.user
             new_trip.title = request.data["title"]
             new_trip.city = request.data["city"]
-            new_trip.start_date = request.data["start_date"]
-            new_trip.end_date = request.data["end_date"]
+            new_trip.start_date = datetime.strptime(request.data["start_date"], "%m/%d/%Y").date()
+            new_trip.end_date = datetime.strptime(request.data["end_date"], "%m/%d/%Y").date()
             new_trip.save()
 
             UserTrip.objects.create(user=new_trip.creator, trip=new_trip)
