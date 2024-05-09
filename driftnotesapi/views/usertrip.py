@@ -44,8 +44,8 @@ class UserTrips(ViewSet):
         """
         try:
             new_usertrip = UserTrip()
-            new_usertrip.user = request.data["user"]
-            new_usertrip.trip = request.data["trip"]
+            new_usertrip.user_id = request.data["user"]
+            new_usertrip.trip_id = request.data["trip"]
             new_usertrip.save()
 
             serializer = UserTripSerializer(new_usertrip, context={"request": request})
@@ -101,11 +101,11 @@ class UserTrips(ViewSet):
             ]
         """
         try:
-            user = request.user
-            if user.is_authenticated:
-                usertrips = UserTrip.objects.filter(user=user)
-            else:
-                usertrips = UserTrip.objects.none()
+            usertrips = UserTrip.objects.all()
+            # if user.is_authenticated:
+            #     usertrips = UserTrip.objects.filter(user=user)
+            # else:
+            #     usertrips = UserTrip.objects.none()
 
             serializer = UserTripSerializer(
                 usertrips, many=True, context={"request": request}

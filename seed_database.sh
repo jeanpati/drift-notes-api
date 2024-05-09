@@ -10,7 +10,7 @@ python3 manage.py loaddata token
 python3 manage.py loaddata trip
 python3 manage.py loaddata usertrip
 python3 manage.py loaddata day
-python3 manage.py loaddata event
+
 
 
 
