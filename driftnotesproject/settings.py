@@ -129,6 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# added below to deploy
+DISABLE_COLLECTSTATIC = os.environ.get('DISABLE_COLLECTSTATIC', '') == '1'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
