@@ -164,8 +164,8 @@ class Trips(ViewSet):
         # If not, it returns the default value, which is trip.name.
         trip.title = request.data.get("title", trip.title)
         trip.city = request.data.get("city", trip.city)
-        trip.start_date = parse_date(request.data.get("start_date", trip.start_date))
-        trip.end_date = parse_date(request.data.get("end_date", trip.end_date))
+        trip.start_date = parse_date(request.data.get("start_date", str(trip.start_date)))
+        trip.end_date = parse_date(request.data.get("end_date", str(trip.end_date)))
         trip.save()
         # Update days for the trip
         if "start_date" in request.data or "end_date" in request.data:
@@ -191,7 +191,9 @@ class Trips(ViewSet):
             for date in missing_dates:
                 Day.objects.create(trip=trip, date=date)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = TripSerializer(trip, context={"request": request})    
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
 
     def destroy(self, request, pk=None):
         """
