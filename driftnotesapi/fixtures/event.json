@@ -1,0 +1,110 @@
+[
+  {
+    "model": "driftnotesapi.event",
+    "pk": 1,
+    "fields": {
+      "title": "Client Meeting",
+      "category": 1,
+      "start_time": "10:00",
+      "end_time": "11:30",
+      "location": "123 Main St, New York",
+      "day": 1
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 2,
+    "fields": {
+      "title": "Team Lunch",
+      "category": 1,
+      "start_time": "12:00",
+      "end_time": "13:30",
+      "location": "456 Oak St, New York",
+      "day": 1
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 3,
+    "fields": {
+      "title": "Sightseeing",
+      "category": 2,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "location": "Statue of Liberty, New York",
+      "day": 2
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 4,
+    "fields": {
+      "title": "Dinner with Clients",
+      "category": 1,
+      "start_time": "19:00",
+      "end_time": "21:00",
+      "location": "789 Pine St, New York",
+      "day": 2
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 5,
+    "fields": {
+      "title": "Beach Day",
+      "category": 2,
+      "start_time": "10:00",
+      "end_time": "16:00",
+      "location": "Miami Beach, Miami",
+      "day": 6
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 6,
+    "fields": {
+      "title": "Water Sports",
+      "category": 2,
+      "start_time": "10:00",
+      "end_time": "12:00",
+      "location": "Miami Beach, Miami",
+      "day": 7
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 7,
+    "fields": {
+      "title": "Shopping",
+      "category": 2,
+      "start_time": "14:00",
+      "end_time": "16:00",
+      "location": "Downtown Miami",
+      "day": 7
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 8,
+    "fields": {
+      "title": "Hiking",
+      "category": 2,
+      "start_time": "08:00",
+      "end_time": "12:00",
+      "location": "Rocky Mountain National Park",
+      "day": 16
+    }
+  },
+  {
+    "model": "driftnotesapi.event",
+    "pk": 9,
+    "fields": {
+      "title": "Rafting",
+      "category": 2,
+      "start_time": "13:00",
+      "end_time": "16:00",
+      "location": "Clear Creek, Colorado",
+      "day": 16
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "model": "driftnotesapi.trip",
+    "pk": 1,
+    "fields": {
+      "creator": 4,
+      "title": "Business Trip",
+      "city": "New York",
+      "start_date": "2024-05-01",
+      "end_date": "2024-05-05"
+    }
+  },
+  {
+    "model": "driftnotesapi.trip",
+    "pk": 2,
+    "fields": {
+      "creator": 4,
+      "title": "Family Vacation",
+      "city": "Miami",
+      "start_date": "2024-06-01",
+      "end_date": "2024-06-10"
+    }
+  },
+  {
+    "model": "driftnotesapi.trip",
+    "pk": 3,
+    "fields": {
+      "creator": 4,
+      "title": "Hiking Adventure",
+      "city": "Denver",
+      "start_date": "2024-07-01",
+      "end_date": "2024-07-07"
+    }
+  }
+]

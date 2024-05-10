@@ -1,0 +1,82 @@
+[
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "trip": 1
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "trip": 1
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "trip": 1
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "trip": 1
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 5,
+    "fields": {
+      "user": 1,
+      "trip": 2
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 6,
+    "fields": {
+      "user": 2,
+      "trip": 2
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 7,
+    "fields": {
+      "user": 3,
+      "trip": 2
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 8,
+    "fields": {
+      "user": 4,
+      "trip": 2
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 9,
+    "fields": {
+      "user": 1,
+      "trip": 3
+    }
+  },
+  {
+    "model": "driftnotesapi.usertrip",
+    "pk": 10,
+    "fields": {
+      "user": 2,
+      "trip": 3
+    }
+  }
+]
