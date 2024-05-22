@@ -99,10 +99,10 @@ class Trips(ViewSet):
         user = request.user
         if user.is_authenticated:
             try:
-                all_trips = Trip.objects.all()
-                serializer = TripSerializer(
-                    all_trips, context={"request": request}, many=True
-                )
+                user_trips = UserTrip.objects.filter(user=user)
+                trip_ids = [user_trip.trip.id for user_trip in user_trips]
+                trips = Trip.objects.filter(id__in=trip_ids)
+                serializer = TripSerializer(trips, context={"request": request}, many=True)
                 return Response(serializer.data)
             except Exception as ex:
                 return HttpResponseServerError(ex)
