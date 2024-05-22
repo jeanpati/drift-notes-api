@@ -48,6 +48,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'http://driftnotes.com',
+    'https://driftnotes.com',
 )
 
 
