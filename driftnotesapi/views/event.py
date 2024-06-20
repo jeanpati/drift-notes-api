@@ -10,8 +10,6 @@ from .category import CategorySerializer
 import googlemaps
 from datetime import datetime
 
-gmaps = googlemaps.Client(key='Add Your Key here')
-
 
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for Events"""

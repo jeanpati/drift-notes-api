@@ -2,10 +2,13 @@
 from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from the .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -17,6 +20,8 @@ DEBUG = os.getenv("DEBUG", "False")
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", '').split(",")
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False")
+
+GOOGLE_MAPS_API_KEY = os.getenv("GMAPS_KEY")
 
 # Application definition
 
