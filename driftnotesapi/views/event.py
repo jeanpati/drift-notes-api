@@ -7,6 +7,10 @@ from django.http import HttpResponseServerError
 from driftnotesapi.models import Event, UserTrip, Day, Category, event_start, event_end
 from .day import DaySerializer
 from .category import CategorySerializer
+import googlemaps
+from datetime import datetime
+
+gmaps = googlemaps.Client(key='Add Your Key here')
 
 
 class EventSerializer(serializers.ModelSerializer):
