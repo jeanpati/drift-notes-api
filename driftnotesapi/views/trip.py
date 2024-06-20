@@ -11,19 +11,19 @@ import googlemaps
 from django.conf import settings
 
 gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-print(f"Using Google Maps API Key in trip.py: {settings.GOOGLE_MAPS_API_KEY}")
 
 def geocode_city(city):
     geocode_result = gmaps.geocode(city)
 
     if not geocode_result:
-        return None
+        return None, None, None
 
     location = geocode_result[0]['geometry']['location']
     latitude = location['lat']
-    longitude = location['lng']
+    longitude = longitude = location['lng']
+    formatted_address = geocode_result[0]['formatted_address']
 
-    return latitude, longitude
+    return latitude, longitude, formatted_address
 
 
 
@@ -42,6 +42,8 @@ class TripSerializer(serializers.ModelSerializer):
             "creator",
             "title",
             "city",
+            "latitude",
+            "longitude",
             "start_date",
             "end_date",
         )
@@ -85,9 +87,10 @@ class Trips(ViewSet):
             new_trip.creator = request.user
             new_trip.title = request.data["title"]
             new_trip.city = request.data["city"]
-            latitude, longitude = geocode_city(new_trip.city)
+            latitude, longitude, formatted_address = geocode_city(new_trip.city)
             new_trip.latitude = latitude
             new_trip.longitude = longitude
+            new_trip.city = formatted_address
             new_trip.start_date = datetime.strptime(request.data["start_date"], "%m/%d/%Y").date()
             new_trip.end_date = datetime.strptime(request.data["end_date"], "%m/%d/%Y").date()
             new_trip.save()
