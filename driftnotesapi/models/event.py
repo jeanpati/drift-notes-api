@@ -14,6 +14,8 @@ class Event(models.Model):
     day = models.ForeignKey("Day", on_delete=models.CASCADE)
     title = models.CharField(max_length=155)
     location = models.CharField(max_length=155, blank=True, null=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     start_time = models.TimeField(default=event_start)
     end_time = models.TimeField(default=event_end)
     category = models.ForeignKey(

@@ -7,8 +7,7 @@ from django.http import HttpResponseServerError
 from driftnotesapi.models import Event, UserTrip, Day, Category, event_start, event_end
 from .day import DaySerializer
 from .category import CategorySerializer
-import googlemaps
-from datetime import datetime
+from .trip import geocode_location
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -26,6 +25,8 @@ class EventSerializer(serializers.ModelSerializer):
             "day",
             "title",
             "location",
+            "latitude",
+            "longitude",
             "start_time",
             "end_time",
             "category",
@@ -59,7 +60,11 @@ class Events(ViewSet):
             new_event = Event()
             new_event.day = day
             new_event.title = request.data["title"]
-            new_event.location = request.data.get("location", "")
+            new_event.location = request.data.get("location")
+            latitude, longitude, formatted_address = geocode_location(new_event.location)
+            new_event.latitude = latitude
+            new_event.longitude = longitude
+            new_event.location = formatted_address
             new_event.start_time = request.data.get("start_time", event_start())
             new_event.end_time = request.data.get("end_time", event_end())
             category_id = request.data.get("category")
